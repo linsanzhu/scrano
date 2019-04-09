@@ -1,0 +1,28 @@
+{
+  "name": "scrano",
+  "version": "1.0.0",
+  "description": "模仿scrapy的node爬虫框架",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/binzaq/scrano.git"
+  },
+  "keywords": [
+    "scrapy",
+    "scrano",
+    "crawler",
+    "nodejs"
+  ],
+  "author": "binz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/binzaq/scrano/issues"
+  },
+  "homepage": "https://github.com/binzaq/scrano#readme",
+  "dependencies": {
+    "log4js": "^4.1.0"
+  }
+}
