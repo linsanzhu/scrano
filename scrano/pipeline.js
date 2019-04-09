@@ -1,9 +1,9 @@
 const exceptions = require('./exception')
-const {Item} = require('./item')
+const {Item, } = require('./item')
 const signal = require('./signal')
 
 class ChainNode {
-    constructor({next, prev, item}={}) {
+    constructor({next, prev, item, } = {}) {
         this.next = next || this
         this.prev = prev || this
         this.item = item
@@ -20,11 +20,11 @@ class ChainNode {
 
 class PipelineChain {
     constructor(engine, pipelines) {
-        this.chain = new ChainNode();
+        this.chain = new ChainNode()
         this.engine = engine
-        for(let pl of pipelines) {
-            let chainNode = new ChainNode({item: pl})
-            this.chain.prev.setNext(chainNode);
+        for (const pl of pipelines) {
+            const chainNode = new ChainNode({item: pl, })
+            this.chain.prev.setNext(chainNode)
             chainNode.setPrev(this.chain.prev)
             this.chain.setPrev(chainNode)
             chainNode.setNext(this.chain)
@@ -40,25 +40,25 @@ class PipelineChain {
      */
     processItem(item, spider) {
         let pointer = this.chain.next
-        while(pointer.item) {
+        while (pointer.item) {
             try {
-                if(pointer.item.processItem) {
-                    let result = point.item.processItem(item, spider)
-                    if(result && !(result instanceof Item)) {
+                if (pointer.item.processItem) {
+                    const result = pointer.item.processItem(item, spider)
+                    if (result && !(result instanceof Item)) {
                         this.engine.schedule(item, spider)
                         break
                     }
                 }
-            } catch(err) {
-                if(err instanceof exceptions.DropItem){
-                    signal.emit(ITEM_DROPPED, item, err, spider)                    
+            } catch (err) {
+                if (err instanceof exceptions.DropItem) {
+                    signal.emit(signal.ITEM_DROPPED, item, err, spider)                    
                     break
                 }
                 this.engine.captureError(err)
             }
             pointer = pointer.next
         }
-        signal.emit(ITEM_SCRAPED, item, spider)
+        signal.emit(signal.ITEM_SCRAPED, item, spider)
     }
 
     /**
@@ -66,11 +66,12 @@ class PipelineChain {
      */
     engineOpended() {
         let pointer = this.chain.prev
-        while(pointer.item) {
+        while (pointer.item) {
             try {
-                if(pointer.item.engineOpended)
+                if (pointer.item.engineOpended) {
                     pointer.item.engineOpended()
-            } catch(err) {
+                }
+            } catch (err) {
                 this.engine.captureError(err)
             }
             pointer = pointer.prev
@@ -82,11 +83,12 @@ class PipelineChain {
      */
     engineClosed() {
         let pointer = this.chain.next
-        while(pointer.item) {
+        while (pointer.item) {
             try {
-                if(pointer.item.engineClosed)
+                if (pointer.item.engineClosed) {
                     pointer.item.engineClosed()
-            } catch(err) {
+                }
+            } catch (err) {
                 this.engine.captureError(err)
             }
             pointer = pointer.next
@@ -95,5 +97,5 @@ class PipelineChain {
 }
 
 module.exports = {
-    PipelineChain
+    PipelineChain,
 }

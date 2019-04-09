@@ -2,7 +2,7 @@ const path = require('path')
 const extensions = require('./extensions')
 
 
-const SPIDER_MIDDLEWARES = [
+const SPIDER_MIDDLEWARES = [ 
 
 ]
 
@@ -15,7 +15,7 @@ const ITEM_PIPELINES = [
 ]
 
 const EXTENSIONS = [
-    [extensions.logger, 'on']
+    [ extensions.logger, 'on', ],
 ]
 
 // 开启日志文件
@@ -51,7 +51,7 @@ const DEFAULT_REQUEST_HEADER = {
 // 请求失败的最大重试次数
 const RETRY_TIMES = 3
 
-let config = {
+const config = {
     SPIDER_MIDDLEWARES,
     DOWNLOAD_MIDDLEWARES,
     ITEM_PIPELINES,
@@ -68,25 +68,25 @@ let config = {
 }
 
 const loadConfig = function(options) {
-    for(let key in config) {
-        if(['SPIDER_MIDDLEWARES', 'DOWNLOAD_MIDDLEWARES', 'ITEM_PIPELINES'].includes(key)) {
-            let cache = [...config[key], ...(options[key] ? options[key] : [])].filter((x)=>{
-                return x[1] != 'off'
+    for (const key in config) {
+        if ([ 'SPIDER_MIDDLEWARES', 'DOWNLOAD_MIDDLEWARES', 'ITEM_PIPELINES', ].includes(key)) {
+            const cache = [ ...config[key], ...(options[key] ? options[key] : []), ].filter((x) => {
+                return x[1] !== 'off'
             })
-            cache.sort((x, y)=>{
+            cache.sort((x, y) => {
                 return parseInt(x[1]) > parseInt(y[1])
             })
-            config[key] = cache.map(x=>x[0])
-        } else if(Array.isArray(config[key])){
-            config[key] = [...config[key], ...(options[key] ? options[key] : [])]
-        } else if(config[key] instanceof Object) {
+            config[key] = cache.map((x) => x[0])
+        } else if (Array.isArray(config[key])) {
+            config[key] = [ ...config[key], ...(options[key] ? options[key] : []), ]
+        } else if (config[key] instanceof Object) {
             config[key] = Object.assign({}, config[key], options[key])
         } else {
             config[key] = options[key] || config[key]
         }
     }
-    for(let key in options) {
-        if(!config[key]) {
+    for (const key in options) {
+        if (!config[key]) {
             config[key] = options[key]
         }
     }
@@ -94,5 +94,5 @@ const loadConfig = function(options) {
 }
 
 module.exports = {
-    loadConfig
+    loadConfig,
 }

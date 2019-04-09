@@ -1,4 +1,4 @@
-const _signal_manager_ = {
+const __signalManager__ = {
 
 }
 
@@ -76,19 +76,19 @@ const INIT_EXTENSION = Symbol()
 const EXCEPTION_RAISED = Symbol()
 
 function emit(signal, ...args) {
-    if(!(signal in _signal_manager_)) {
+    if (!(signal in __signalManager__)) {
         return 
     }
-    _signal_manager_[signal].forEach(slot => {
+    __signalManager__[signal].forEach((slot) => {
         slot.call(signal, ...args)
     })
 }
 
 function connect(signal, slot) {
-    if(!(signal in _signal_manager_)) {
-        _signal_manager_[signal] = new Set()
+    if (!(signal in __signalManager__)) {
+        __signalManager__[signal] = new Set()
     }
-    _signal_manager_[signal].add(slot)
+    __signalManager__[signal].add(slot)
 }
 
 

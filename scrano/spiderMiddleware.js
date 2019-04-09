@@ -1,7 +1,9 @@
 const signal = require('./signal')
+const { Request, } = require('./request')
+const { Item, } = require('./item')
 
 class ChainNode {
-    constructor({next, prev, middleware}={}) {
+    constructor({next, prev, middleware, } = {}) {
         this.next = next || this
         this.prev = prev || this
         this.middleware = middleware
@@ -9,7 +11,7 @@ class ChainNode {
     setNext(next) {
         this.next = next
     }
-    setPrev(perv) {
+    setPrev(prev) {
         this.prev = prev
     }
 }
@@ -18,23 +20,24 @@ class SpiderMiddlewareChain {
     constructor(engine, middleWares) {
         this.engine = engine
         this.chain = new ChainNode()
-        for(let md of middleWares) {
-            let chainNode = new ChainNode({middleware: md})
-            this.chain.prev.setNext(chainNode);
+        for (const md of middleWares) {
+            const chainNode = new ChainNode({middleware: md, })
+            this.chain.prev.setNext(chainNode)
             chainNode.setPrev(this.chain.prev)
             this.chain.setPrev(chainNode)
             chainNode.setNext(this.chain)
         }
     }
 
-    processSpiderInput({response, spider}, afterProcess=null) {
+    processSpiderInput({response, spider, }, afterProcess = null) {
         let pointer = this.chain.next
-        while(pointer.middleware) {
+        while (pointer.middleware) {
             try {
-                if(pointer.middleware.processSpiderInput)
-                    pointer.middleware.processSpiderInput({response, spider})
-            }catch(err) {
-                this.processSpiderException(response, exception, spider)
+                if (pointer.middleware.processSpiderInput) {
+                    pointer.middleware.processSpiderInput({response, spider, })
+                }
+            } catch (err) {
+                this.processSpiderException(response, err, spider)
                 return
             }
             pointer = pointer.next
@@ -43,14 +46,15 @@ class SpiderMiddlewareChain {
         afterProcess && afterProcess(response, spider)
     }
 
-    processSpiderOutput({response, result, spider}, afterProcess=null) {
+    processSpiderOutput({response, result, spider, }, afterProcess = null) {
         let pointer = this.chain.prev
-        while(pointer.middleware) {
+        while (pointer.middleware) {
             try {
-                if(pointer.middleware.processSpiderOutput)
-                    pointer.middleware.processSpiderOutput({response, result, spider})
-            }catch(err) {
-
+                if (pointer.middleware.processSpiderOutput) {
+                    pointer.middleware.processSpiderOutput({response, result, spider, })
+                }
+            } catch (err) {
+                this.processSpiderException(response, err, spider)
             }
             pointer = pointer.prev
         }
@@ -66,14 +70,14 @@ class SpiderMiddlewareChain {
     processSpiderException(response, exception, spider) {
         let pointer = this.chain.prev
         let result = null
-        while(pointer.middleware) {
-            if(pointer.middleware.processSpiderException) {
-                result = pointer.middleware.processSpiderException({response, exception, spider})
-                if(result instanceof Request) {
+        while (pointer.middleware) {
+            if (pointer.middleware.processSpiderException) {
+                result = pointer.middleware.processSpiderException({response, exception, spider, })
+                if (result instanceof Request) {
                     this.engine.schedule(result, spider)
                     return
-                } else if(result instanceof Item) {
-                    this.processSpiderOutput({response, result, spider}, this.engine.schedule)
+                } else if (result instanceof Item) {
+                    this.processSpiderOutput({response, result, spider, }, this.engine.schedule)
                     return
                 }
             }
@@ -82,17 +86,18 @@ class SpiderMiddlewareChain {
         this.engine.caputreError(exception)
     }
 
-    processStartRequests(start_requests, spider) {
+    processStartRequests(startRequests, spider) {
         let pointer = this.chain.prev
-        while(pointer.middleware) {
-            if(pointer.middleware.processStartRequests)
-                start_requests = pointer.middleware.processStartRequests({start_requests, spider})
+        while (pointer.middleware) {
+            if (pointer.middleware.processStartRequests) {
+                startRequests = pointer.middleware.processStartRequests({startRequests, spider, })
+            }
             pointer = pointer.prev
         }
-        return start_requests
+        return startRequests
     }
 }
 
 module.exports = {
-    SpiderMiddlewareChain
+    SpiderMiddlewareChain,
 }

@@ -1,14 +1,15 @@
 {
   "name": "scrano",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "模仿scrapy的node爬虫框架",
-  "main": "index.js",
+  "main": "./scrano/index.js",
   "scripts": {
+    "preset": "eslint 'scrano/**/*.js' 'test/**/*.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/binzaq/scrano.git"
+    "url": "https://github.com/binzaq/scrano.git"
   },
   "keywords": [
     "scrapy",
@@ -16,16 +17,29 @@
     "crawler",
     "nodejs"
   ],
-  "author": "binz",
-  "license": "MIT",
+  "author": "binz <bin.zaq@foxmail.com>",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=6.0"
+  },
   "bugs": {
     "url": "https://github.com/binzaq/scrano/issues"
   },
   "homepage": "https://github.com/binzaq/scrano#readme",
   "dependencies": {
-    "log4js": "^4.1.0"
+    "log4js": "^4.1.0",
+    "xmldom": "^0.1.27",
+    "xpath": "0.0.27"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "husky": "^1.3.1",
     "mocha": "^6.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run preset",
+      "pre-push": "npm run preset"
+    }
   }
 }

@@ -9,15 +9,15 @@ class Response {
     }
 
     xpath(selector) {
-
+        //
     }
 
     css(selector) {
-
+        // 
     }
 
     re(selector) {
-        let sel = (selector instanceof RegExp) ? selector : new RegExp(selector)
+        const sel = (selector instanceof RegExp) ? selector : new RegExp(selector)
         return sel.exec(this.body.toString())
     }
 
@@ -27,5 +27,5 @@ class Response {
 }
 
 module.exports = {
-    Response
+    Response,
 }

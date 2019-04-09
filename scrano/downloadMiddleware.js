@@ -1,10 +1,10 @@
 const exceptions = require('./exception')
-const {Response} = require('./response')
-const {Request} = require('./request')
+const { Response, } = require('./response')
+const { Request, } = require('./request')
 const signal = require('./signal')
 
 class ChainNode {
-    constructor({next, prev, middleware}={}) {
+    constructor({next, prev, middleware, } = {}) {
         this.next = next || this
         this.prev = prev || this
         this.middleware = middleware
@@ -22,10 +22,10 @@ class ChainNode {
 class DownloadMiddlewareChain {
     constructor(engine, downloadMiddlewares) {
         this.engine = engine
-        this.chain = new ChainNode();
-        for(let md of downloadMiddlewares) {
-            let chainNode = new ChainNode({middleware: md})
-            this.chain.prev.setNext(chainNode);
+        this.chain = new ChainNode()
+        for (const md of downloadMiddlewares) {
+            const chainNode = new ChainNode({middleware: md, })
+            this.chain.prev.setNext(chainNode)
             chainNode.setPrev(this.chain.prev)
             this.chain.setPrev(chainNode)
             chainNode.setNext(this.chain)
@@ -39,25 +39,26 @@ class DownloadMiddlewareChain {
      * @param {Spider} spider 与request关联的spider
      * @param {Funtion} afterProcess request的目的地，下载器接收request的收信器
      */
-    processRequest({request, spider}, afterProcess=null) {
-        let pointer = this.chain.next;
+    processRequest({request, spider, }, afterProcess = null) {
+        let pointer = this.chain.next
         let result = null
-        while(pointer.middleware) {
-            try{
-                if(pointer.middleware.processRequest)
-                    result = pointer.middleware.processRequest({request, spider})
-            }catch(err) {
-                pointer.middleware.processExeption({request, exception: err, spider}, pointer)
+        while (pointer.middleware) {
+            try {
+                if (pointer.middleware.processRequest) {
+                    result = pointer.middleware.processRequest({request, spider, })
+                }
+            } catch (err) {
+                pointer.middleware.processExeption({request, exception: err, spider, }, pointer)
                 return
             }
-            if(result instanceof Request) {
+            if (result instanceof Request) {
                 this.engine.schedule(result, spider)
                 return
             } else if (result instanceof Response) {
-                this.processResponse({response: result, spider}, this.engine.schedule)
+                this.processResponse({response: result, spider, }, this.engine.schedule)
                 return
             }
-            pointer = pointer.next;
+            pointer = pointer.next
         }
         signal.emit(signal.REQUEST_REACHED_DOWNLOADER, request, spider)
         afterProcess && afterProcess(request, spider)
@@ -68,22 +69,23 @@ class DownloadMiddlewareChain {
      * @param {Response} response 由下载器交付的响应
      * @param {Function} afterProcess engine接收响应的接收器
      */
-    processResponse({response, spider}, afterProcess=null) {
+    processResponse({response, spider, }, afterProcess = null) {
         signal.emit(signal.RESPONSE_DOWNLOADED, response, spider)
-        let pointer = this.chain.prev;
+        let pointer = this.chain.prev
         let result = null
-        while(pointer.middleware) {
+        while (pointer.middleware) {
             try {
-                if(pointer.middleware.processResponse)
-                    result = pointer.middleware.processResponse({response, spider})
-            } catch(err) {
-                this.processExeption({request, exception: err, spider}, pointer)
+                if (pointer.middleware.processResponse) {
+                    result = pointer.middleware.processResponse({response, spider, })
+                }
+            } catch (err) {
+                this.processExeption({request: response.request, exception: err, spider, }, pointer)
                 return
             }
-            if(result instanceof Request) {
+            if (result instanceof Request) {
                 this.engine.schedule(result, spider)
                 return
-            } else if(result instanceof Response) {
+            } else if (result instanceof Response) {
                 response = result
             }
             pointer = pointer.prev
@@ -96,20 +98,20 @@ class DownloadMiddlewareChain {
      * 
      * @param {*} param0 
      */
-    processExeption({request, exception, spider}, pointer=null) {
-        if(exception instanceof exceptions.IgnoreRequest) {
+    processExeption({request, exception, spider, }, pointer = null) {
+        if (exception instanceof exceptions.IgnoreRequest) {
             signal.emit(signal.IGNORE_REQUEST, request, spider)
             return
         }
         pointer || (pointer = this.chain.prev)
-        while(pointer.middleware) {
-            if(pointer.middleware.processExeption) {
-                let result = pointer.middleware.processExeption({request, exception, spider})
-                if(result instanceof Request) {
+        while (pointer.middleware) {
+            if (pointer.middleware.processExeption) {
+                const result = pointer.middleware.processExeption({request, exception, spider, })
+                if (result instanceof Request) {
                     this.engine.schedule(result, spider)
                     return
                 } else if (result instanceof Response) {
-                    this.processResponse({response: result, spider})
+                    this.processResponse({response: result, spider, })
                     return
                 }
             }
@@ -120,5 +122,5 @@ class DownloadMiddlewareChain {
 }
 
 module.exports = {
-    DownloadMiddlewareChain
+    DownloadMiddlewareChain,
 }

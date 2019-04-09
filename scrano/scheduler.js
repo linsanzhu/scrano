@@ -1,7 +1,7 @@
 const signal = require('./signal')
-const {Request} = require('./request')
-const {Response} = require('./response')
-const {Item} = require('./item')
+const {Request, } = require('./request')
+const {Response, } = require('./response')
+const {Item, } = require('./item')
 
 class Scheduler {
     constructor(engine, options) {
@@ -14,10 +14,10 @@ class Scheduler {
     }
 
     _process_() {
-        let item = this.waitingQueue.splice(0,1)
-        if(item.length > 0) {
+        let item = this.waitingQueue.splice(0, 1)
+        if (item.length > 0) {
             item = item[0]
-            if(item.obj instanceof Request) {
+            if (item.obj instanceof Request) {
                 signal.emit(signal.REQUEST_SCHEDULED, item.obj)
                 this.engine.toggleDownloadProcess(item.obj, item.spider)
             } else if (item.obj instanceof Response) {
@@ -26,18 +26,16 @@ class Scheduler {
             } else if (item.obj instanceof Item) {
                 signal.emit(signal.ITEM_SCHEDULED, item.obj)
                 this.engine.togglePipelineProcess(item.obj, item.spider)
-            } else {
-
-            }
+            } 
         } else {
             signal.emit(signal.SCHEDULER_QUEUE_EMPTY)
         }
         this.timer = setTimeout(this._process_, 0)
     }
 
-    schedule({obj, spider}) {
+    schedule({obj, spider, }) {
         signal.emit(signal.SCHEDULER_QUEUE_NOT_EMPTY)
-        this.waitingQueue.push({obj, spider})
+        this.waitingQueue.push({obj, spider, })
     }
     
     stop() {
@@ -48,5 +46,5 @@ class Scheduler {
 
 
 module.exports = {
-    Scheduler
+    Scheduler,
 }

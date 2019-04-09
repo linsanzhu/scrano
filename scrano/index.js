@@ -16,7 +16,7 @@ const core = {
     'engine': Core,
     exceptions,
     scheduler,
-    downloader
+    downloader,
 }
 
 const common = {
@@ -34,5 +34,5 @@ module.exports = {
     item,
     request,
     response,
-    crawler
+    crawler,
 }

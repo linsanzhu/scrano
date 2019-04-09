@@ -1,14 +1,14 @@
-const {Scheduler} = require('./scheduler')
-const {Downloader} = require('./downloader')
-const {SpiderMiddlewareChain} = require('./spiderMiddleware')
-const {DownloadMiddlewareChain} = require('./downloadMiddleware')
-const {PipelineChain} = require('./pipeline')
-const {Response}  = require('./response')
+const { Scheduler, } = require('./scheduler')
+const { Downloader, } = require('./downloader')
+const { SpiderMiddlewareChain, } = require('./spiderMiddleware')
+const { DownloadMiddlewareChain, } = require('./downloadMiddleware')
+const { PipelineChain, } = require('./pipeline')
+const { Response, } = require('./response')
 const signal = require('./signal')
 
 class Core {
     constructor(options) {
-        this.options = options;
+        this.options = options
         this.downloadMiddlewareChain = new DownloadMiddlewareChain(this, options.DOWNLOAD_MIDDLEWARES)
         this.spiderMiddlewareChain = new SpiderMiddlewareChain(this, options.SPIDER_MIDDLEWARES)
         this.pipelineChain = new PipelineChain(this, options.ITEM_PIPELINES)
@@ -29,39 +29,39 @@ class Core {
         this.captureError = this.captureError(this)
 
         this._loadExtensions_()
-        this.scheduler_status = 'pendding'
-        this.downloader_status = 'pendding'
+        this.schedulerStatus = 'pendding'
+        this.downloaderStatus = 'pendding'
         this.counter = 0
 
-        this.timer = setInterval(()=>{
-            if(this.scheduler_status === 'watting_exit' && this.downloader_status === 'watting_exit') {
-                this.counter++;
-                if(this.counter > 10) {
+        this.timer = setInterval(() => {
+            if (this.scheduler_status === 'watting_exit' && this.downloader_status === 'watting_exit') {
+                this.counter++
+                if (this.counter > 10) {
                     this.stop()
                 }
             } else {
-                this.counter = 0;
+                this.counter = 0
             }
         }, 500)
         
-        signal.connect(signal.SCHEDULER_QUEUE_EMPTY, ()=>{
-            this.scheduler_status = 'watting_exit'
+        signal.connect(signal.SCHEDULER_QUEUE_EMPTY, () => {
+            this.schedulerStatus = 'watting_exit'
         })
-        signal.connect(signal.SCHEDULER_QUEUE_NOT_EMPTY, ()=>{
-            this.scheduler_status = 'pendding'
+        signal.connect(signal.SCHEDULER_QUEUE_NOT_EMPTY, () => {
+            this.schedulerStatus = 'pendding'
         })
-        signal.connect(signal.DOWNLOADER_QUEUE_EMPTY, ()=>{
-            this.downloader_status = 'watting_exit'
+        signal.connect(signal.DOWNLOADER_QUEUE_EMPTY, () => {
+            this.downloaderStatus = 'watting_exit'
         })
-        signal.connect(signal.DOWNLOADER_QUEUE_NOT_EMPTY, ()=>{
-            this.downloader_status = 'pendding'
+        signal.connect(signal.DOWNLOADER_QUEUE_NOT_EMPTY, () => {
+            this.downloaderStatus = 'pendding'
         })
         signal.emit(signal.ENGINE_STARTED, this)
     }
 
     _loadExtensions_() {
-        for(let extension of this.options.EXTENSIONS) {
-            if(extension[1] === 'off') {
+        for (const extension of this.options.EXTENSIONS) {
+            if (extension[1] === 'off') {
                 continue
             }
             extension[0].init(this.options)
@@ -75,8 +75,8 @@ class Core {
      * @param {Request} request 将要由下载器处理的请求
      * @param {Spider} spider 与请求相关联的spider
      */
-    distributeRequest({request, spider}) {
-        this.downloadMiddlewareChain.processRequest({request, spider}, this.downloader.fetch);
+    distributeRequest({request, spider, }) {
+        this.downloadMiddlewareChain.processRequest({request, spider, }, this.downloader.fetch)
     }
 
     /** 用于下载器交付下载结果的指令,交付途中由下载器中间件处理
@@ -85,8 +85,8 @@ class Core {
      * @param {Response} response 下载结果
      * @param {Spider} spider 与下载结果关联的spider
      */
-    deliverDownloadResult({response, spider}) {
-        this.downloadMiddlewareChain.processResponse({response, spider}, this.schedule)
+    deliverDownloadResult({response, spider, }) {
+        this.downloadMiddlewareChain.processResponse({response, spider, }, this.schedule)
     }
 
     /** 分发响应到spider, 分发途中由spider中间件处理
@@ -95,8 +95,8 @@ class Core {
      * @param {Response} response 将要分发给spider处理的响应
      * @param {Spider} spider 响应被分发的去向
      */
-    distributeResponse({response, spider}) {
-        this.spiderMiddlewareChain.processSpiderInput({response, spider}, this.askSpiderParseResult)
+    distributeResponse({response, spider, }) {
+        this.spiderMiddlewareChain.processSpiderInput({response, spider, }, this.askSpiderParseResult)
     }
 
     /** 用于引擎主动回收spider解析响应后的结果, spider处理的结果将直接经由中间件构成的路径传递回引擎
@@ -105,12 +105,12 @@ class Core {
      * @param {Spider} spider 被交与的spider对象
      */
     askSpiderParseResult(response, spider) {
-        if(response instanceof Response && response.request && response.request.callback) {
-            let results = response.request.callback(response, spider)
-            for(let result of results) {
-                setTimeout(()=>{
-                    this.deliverSpiderOutput({response, result, spider})
-                },0)
+        if (response instanceof Response && response.request && response.request.callback) {
+            const results = response.request.callback(response, spider)
+            for (const result of results) {
+                setTimeout(() => {
+                    this.deliverSpiderOutput({response, result, spider, })
+                }, 0)
             }
         }
     }
@@ -122,13 +122,14 @@ class Core {
      * @param {any} result spider的处理结果
      * @param {Spider} 
      */
-    deliverSpiderOutput({response, result, spider}) {
-        this.spiderMiddlewareChain.processSpiderOutput({response, result, spider}, this.schedule)
+    deliverSpiderOutput({response, result, spider, }) {
+        this.spiderMiddlewareChain.processSpiderOutput({response, result, spider, }, this.schedule)
     }
 
-    distributeItem({item, spider}) {
+    distributeItem({item, spider, }) {
         this.pipelineChain.processItem(item, spider)
     }
+
     /** 由调度器触发下载请求的指令
      * 
      * @for Core
@@ -136,7 +137,7 @@ class Core {
      * @param {Spider} spider 与被调度的请求关联的spider
      */
     toggleDownloadProcess(request, spider) {
-        this.distributeRequest({request, spider})
+        this.distributeRequest({request, spider, })
     }
 
     /** 由调度器触发spider处理响应的指令
@@ -147,7 +148,7 @@ class Core {
      * @param {Spider} spider 将要处理response的spider
      */
     toggleSpiderProcess(response, spider) {
-        this.distributeResponse({response, spider})
+        this.distributeResponse({response, spider, })
     }
 
     /** 由调度器触发处理抓取结果的指令
@@ -157,7 +158,7 @@ class Core {
      * @param {Spider} spider 生成抓取结果的spider
      */
     togglePipelineProcess(item, spider) {
-        this.distributeItem({item, spider})
+        this.distributeItem({item, spider, })
     }
 
     /** 向调度器询问如何调度
@@ -167,7 +168,7 @@ class Core {
      * @param {Spider} spider 与被调度对象可能有关联的spider
      */
     schedule(obj, spider) {
-        this.scheduler.schedule({obj, spider})
+        this.scheduler.schedule({obj, spider, })
     }
 
     /** 捕获异常并处理
@@ -189,8 +190,8 @@ class Core {
 
     openSpider(spider) {
         signal.emit(signal.SPIDER_OPENED, spider)
-        let start_requests = this.spiderMiddlewareChain.processStartRequests(spider.startRequests(), spider)
-        for(let req of start_requests) {
+        const startRequests = this.spiderMiddlewareChain.processStartRequests(spider.startRequests(), spider)
+        for (const req of startRequests) {
             this.schedule(req, spider)
         }
     }
