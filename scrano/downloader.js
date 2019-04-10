@@ -1,4 +1,5 @@
 const http = require('http')
+const https = require('https')
 const { Request, } = require('./request')
 const { Response, } = require('./response')
 const exceptions = require('./exception')
@@ -59,7 +60,8 @@ class Downloader {
             throw new exceptions.RedirectError(`redirect limited less than ${this.options.MAX_REDIRECT_DEEPTH} times`)
             return undefined
         }
-        const req = http.request(request.meta.url, request.meta.options, (res) => {
+        const h = request.protocol === 'http' ? http : https
+        const req = h.request(request.meta.url, request.meta.options, (res) => {
             this.processingCount--
             if ((res.statusCode === 302 || res.statusCode === 301) && this.options.REDIRECT_ENABLED) {
                 const newRequest = Request.copy(request, {url: res.getHeader('Location'), })

@@ -2,6 +2,8 @@ const exceptions = require('./exception')
 
 class Request {
     constructor(url, callback, options = {method: 'GET', headers: {}, data: undefined, }) {
+        const _ = /^(\S+):\/\/[\s\S]+/.exec(url)
+        this.protocol = (_ && _.length > 1) ? _[1] : 'http'
         this.callback = callback
 
         this.data = options.data
@@ -19,10 +21,9 @@ class Request {
     }
 
     setProxy(host = (() => {throw new exceptions.ParamError('you must specify host')})(), 
-        port = (() => {throw new exceptions.ParamError('you must specify port')})(), protocol = 'http') {
+        port = (() => {throw new exceptions.ParamError('you must specify port')})()) {
         this.meta.options.host = host
         this.meta.options.port = port
-        this.meta.options.protocol = protocol
     }
 
     toString() {

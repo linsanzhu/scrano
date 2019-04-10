@@ -25,7 +25,6 @@ test('set-proxy', () => {
             headers: {},
             host: 'localhost',
             port: 8080,
-            protocol: 'http',
         },
     })
 })
