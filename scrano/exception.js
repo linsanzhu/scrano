@@ -1,5 +1,5 @@
 
-class NotImplementError extends Error {
+class NotImplementedError extends Error {
     constructor(message) {
         super()
         this.message = message || 'function is not implemented'
@@ -41,11 +41,20 @@ class RedirectError extends Error {
     }
 }
 
+
+class ParamError extends Error {
+    constructor(message) {
+        super()
+        this.message = message
+    }
+}
+
 module.exports = {
-    NotImplementError,
+    NotImplementedError,
     ValueError,
     DropItem,
     CloseSpider,
     IgnoreRequest,
     RedirectError,
+    ParamError,
 }

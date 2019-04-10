@@ -20,6 +20,9 @@ const REQUEST_SCHEDULED = Symbol()
 // 请求重定向(返回301或302状态码)时发射
 const REQUEST_REDIRECTED = Symbol()
 
+// 请求被丢弃时发射
+const REQUEST_DROPPED = Symbol()
+
 
 
 // 响应被调度时发射
@@ -72,6 +75,12 @@ const DOWNLOADER_QUEUE_NOT_EMPTY = Symbol()
 // 扩展被初始化时发射
 const INIT_EXTENSION = Symbol()
 
+// 请求超时时发射
+const REQUEST_TIMEOUT = Symbol()
+
+// 重试请求时发射
+const RETRY_REQUEST = Symbol()
+
 // 捕获到异常时发射
 const EXCEPTION_RAISED = Symbol()
 
@@ -105,6 +114,9 @@ module.exports = {
     REQUEST_REACHED_DOWNLOADER,
     REQUEST_SCHEDULED,
     REQUEST_REDIRECTED,
+    REQUEST_TIMEOUT,
+    RETRY_REQUEST,
+    REQUEST_DROPPED,
 
     ITEM_SCHEDULED,
     ITEM_DROPPED,

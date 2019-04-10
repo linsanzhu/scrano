@@ -87,6 +87,14 @@ class LoggerExtension {
         signal.connect(signal.ENGINE_STOPPED, () => {
             logger._logger_.debug('finished, engine has been stopped')
         })
+
+        signal.connect(signal.REQUEST_TIMEOUT, (request) => {
+            logger._logger_.debug(`timeout with request ${request}`)
+        })
+
+        signal.connect(signal.RETRY_REQUEST, (request, times) => {
+            logger._logger_.debug(`retry request ${request} ${times}${times < 4 ? [ 'st', 'nd', 'rd', ][times] : 'th'} time`)
+        })
     }
 }
 

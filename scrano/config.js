@@ -30,12 +30,21 @@ const REDIRECT_ENABLED = true
 // 重定向最大深度, 仅在 REDIRECT_ENABLED = true 时有效, 默认3
 const MAX_REDIRECT_DEEPTH = 3
 
+// 超时时间(秒)
+const REQUEST_TIMEOUT = 120
+
+// 最大重试次数
+const MAX_RETRY = 3
+
+// 最大同时请求数
 const CONCURRENT_REQUESTS = 32
 
 // 启用自动限速给能
 const AUTOTHROTTLE_ENABLED = true
 // 限速最大延迟, 单位秒
 const AUTOTHROTTLE_MAX_DELAY = 60
+
+
 
 // 默认请求头
 const DEFAULT_REQUEST_HEADER = {
@@ -65,6 +74,8 @@ const config = {
     DEFAULT_REQUEST_HEADER,
     RETRY_TIMES,
     EXTENSIONS,
+    REQUEST_TIMEOUT,
+    MAX_RETRY,
 }
 
 const loadConfig = function(options) {

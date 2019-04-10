@@ -1,3 +1,5 @@
+const {XPathSelector, } = require('./selector')
+
 class Response {
     constructor(request, response) {
         this.request = request
@@ -9,11 +11,8 @@ class Response {
     }
 
     xpath(selector) {
-        //
-    }
-
-    css(selector) {
-        // 
+        const sele = new XPathSelector(this.body.toString())
+        return sele.xpath(selector)
     }
 
     re(selector) {

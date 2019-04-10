@@ -8,7 +8,7 @@
     "env":{ 
         "es6": true,
         "node": true,
-        "mocha": true
+        "jest": true
     },
     "rules": {
         "no-cond-assign": 2,
@@ -21,7 +21,7 @@
         "no-invalid-regexp": 2,
         "no-obj-calls": 2,
         "no-unreachable": 0,
-
+        "no-console": 0,
         "accessor-pairs": 2,
         "block-scoped-var": 2,
         "curly": [2, "all"],

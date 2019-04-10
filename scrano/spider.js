@@ -43,7 +43,7 @@ class Spider {
     }
 
     * parse(response) {
-        throw new exceptions.NotImplementError('parse is not implemented')
+        throw new exceptions.NotImplementedError('parse is not implemented')
     }
 
     closed() {

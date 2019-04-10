@@ -51,7 +51,7 @@ class Downloader {
         this.engine.deliverDownloadResult({response, spider, })
     }
 
-    _request_({request, spider, }, deepth = 0) {
+    _request_({request, spider, }, deepth = 0, retryTimes = 0) {
         if (deepth >= this.options.MAX_REDIRECT_DEEPTH) {
             throw new exceptions.RedirectError(`redirect limited less than ${this.options.MAX_REDIRECT_DEEPTH} times`)
             return undefined
@@ -78,10 +78,19 @@ class Downloader {
                     this._deliver_({response, spider, })
                 })
             }
+        }).on('timeout', () => {
+            req.abort()
+            signal.emit(signal.REQUEST_TIMEOUT, req)
+            if (retryTimes >= this.options.MAX_RETRY) {
+                signal.emit(signal.REQUEST_DROPPED, request)
+                return
+            }
+            signal.emit(signal.RETRY_REQUEST, request, retryTimes+1)
+            this._request_({request, spider, }, deepth, retryTimes+1)
         }).on('error', (err) => {
             this.processingCount--
             this.engine.captureError(err)
-        })
+        }).setTimeout(this.options.REQUEST_TIMEOUT*1000)
         if (request.data) {
             req.write(request.data)
         }
