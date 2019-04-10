@@ -4,6 +4,8 @@ class Request {
     constructor(url, callback, options = {method: 'GET', headers: {}, data: undefined, }) {
         const _ = /^(\S+):\/\/[\s\S]+/.exec(url)
         this.protocol = (_ && _.length > 1) ? _[1] : 'http'
+        options.protocol = this.protocol
+
         this.callback = callback
 
         this.data = options.data

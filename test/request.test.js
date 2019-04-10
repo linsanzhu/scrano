@@ -25,6 +25,7 @@ test('set-proxy', () => {
             headers: {},
             host: 'localhost',
             port: 8080,
+            protocol: 'http',
         },
     })
 })
@@ -62,6 +63,7 @@ test('copy-request', () => {
     expect(newRequest.data).toBe('test')
     expect(newRequest.meta.options).toEqual({
         headers: {'Content-Type': 'test', },
+        protocol: 'http',
     })
 
     const newRequest2 = Request.copy(request, {
@@ -72,6 +74,7 @@ test('copy-request', () => {
     expect(newRequest2.data).toBe('test')
     expect(newRequest2.meta.options).toEqual({
         headers: {'Content-Type': 'test', },
+        protocol: 'http',
     })
 })
 
