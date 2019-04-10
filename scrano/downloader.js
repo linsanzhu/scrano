@@ -64,7 +64,7 @@ class Downloader {
         const req = h.request(request.meta.url, request.meta.options, (res) => {
             this.processingCount--
             if ((res.statusCode === 302 || res.statusCode === 301) && this.options.REDIRECT_ENABLED) {
-                const newRequest = Request.copy(request, {url: res.getHeader('Location'), })
+                const newRequest = request.redirect(res.getHeader('Location'))
                 signal.emit(signal.REQUEST_REDIRECTED, request, newRequest, spider)
 
                 const response = this._request_(newRequest, deepth + 1)

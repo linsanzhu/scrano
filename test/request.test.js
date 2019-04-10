@@ -47,37 +47,6 @@ test('set-header', () => {
 })
 
 
-test('copy-request', () => {
-    const request = new Request('http://www.baidu.com', () => {
-        //
-    }, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', },
-    })
-
-    const newRequest = Request.copy(request, {
-        url: 'localhost',
-        headers: { 'Content-Type': 'test', },
-        data: 'test',
-    })
-    expect(newRequest.meta.url).toBe('localhost')
-    expect(newRequest.data).toBe('test')
-    expect(newRequest.meta.options).toEqual({
-        headers: {'Content-Type': 'test', },
-        protocol: 'http',
-    })
-
-    const newRequest2 = Request.copy(request, {
-        headers: { 'Content-Type': 'test', },
-        data: 'test',
-    })
-    expect(newRequest2.meta.url).toBe('http://www.baidu.com')
-    expect(newRequest2.data).toBe('test')
-    expect(newRequest2.meta.options).toEqual({
-        headers: {'Content-Type': 'test', },
-        protocol: 'http',
-    })
-})
-
 test('request-to-string', () => {
     const request = new Request('http://www.baidu.com', () => {
         //

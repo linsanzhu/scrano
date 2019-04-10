@@ -32,14 +32,13 @@ class Request {
         return `<Request ${this.meta.url}>`
     }
 
-    static copy(request, meta = {}) {
-        const url = meta.url
-        if (url) {
-            delete meta.url
+    redirect(url) {
+        const headers = {
+            'refer': this.meta.url,
         }
-        return new Request(url || request.meta.url, 
-            request.callback, 
-            Object.assign({}, request.meta.options, {data: request.data, }, meta)
+        return new Request(url, 
+            this.callback, 
+            Object.assign({}, this.meta.options, {data: this.data, headers, })
         )
     }
 }
