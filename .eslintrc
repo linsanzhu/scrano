@@ -54,7 +54,6 @@
         "global-require": 2,
         "handle-callback-err": [2, "^(err|error)$"],
         "no-new-require": 2,
-
         "array-bracket-spacing": [2, "always"],
         "block-spacing": [1, "never"],
         "brace-style": [2, "1tbs", {
@@ -83,7 +82,7 @@
             "capIsNew": false
         }],
         "new-parens": 2,
-        "newline-per-chained-call": 1,
+        "newline-per-chained-call": 0,
         "no-mixed-spaces-and-tabs": 2,
         "no-spaced-func": 2,
         "operator-linebreak": [2, "after", {
