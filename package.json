@@ -17,7 +17,7 @@
     "crawler",
     "nodejs"
   ],
-  "author": "binz <bin.zaq@foxmail.com>",
+  "author": "bizq <bin.zaq@foxmail.com>",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=6.0"
