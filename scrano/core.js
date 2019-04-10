@@ -26,7 +26,7 @@ class Core {
         this.askSpiderParseResult = this.askSpiderParseResult.bind(this)
         this.stop = this.stop.bind(this)
         this.openSpider = this.openSpider.bind(this)
-        this.captureError = this.captureError(this)
+        this.captureError = this.captureError.bind(this)
 
         this._loadExtensions_()
         this.schedulerStatus = 'pendding'

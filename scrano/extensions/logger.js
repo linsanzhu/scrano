@@ -77,7 +77,7 @@ class LoggerExtension {
         })
 
         signal.connect(signal.EXCEPTION_RAISED, (err) => {
-            logger._logger_.error(err.message)
+            logger._logger_.error(err)
         })
 
         signal.connect(signal.INIT_EXTENSION, (extension) => {
