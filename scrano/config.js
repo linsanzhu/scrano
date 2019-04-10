@@ -1,13 +1,13 @@
 const path = require('path')
 const extensions = require('./extensions')
-
+const middlewares = require('./middlewares')
 
 const SPIDER_MIDDLEWARES = [ 
 
 ]
 
 const DOWNLOAD_MIDDLEWARES = [
-
+    [ middlewares.DefaultRequestHeadersMiddleware, 0, ], 
 ]
 
 const ITEM_PIPELINES = [

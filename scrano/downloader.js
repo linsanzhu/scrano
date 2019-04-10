@@ -91,6 +91,7 @@ class Downloader {
             this.processingCount--
             this.engine.captureError(err)
         }).setTimeout(this.options.REQUEST_TIMEOUT * 1000)
+        
         req.end(request.data, () => {
             this.processingCount++
         })

@@ -32,7 +32,7 @@ class DownloadMiddlewareChain {
         }
     }
 
-    /** request将沿着download中间件组成的链一路向着下载器前进,途中不断被中间件的processRequest方法处理
+    /** request将沿着download中间件组成的链路向着下载器前进,途中不断被中间件的processRequest方法处理
      *  并最终到达终点－下载器
      * 
      * @param {Request} request 将要传输给下载器的request
