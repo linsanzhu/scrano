@@ -56,7 +56,6 @@ class Downloader {
             throw new exceptions.RedirectError(`redirect limited less than ${this.options.MAX_REDIRECT_DEEPTH} times`)
             return undefined
         }
-        this.processingCount++
         const req = http.request(request.meta.url, request.meta.options, (res) => {
             this.processingCount--
             if ((res.statusCode === 302 || res.statusCode === 301) && this.options.REDIRECT_ENABLED) {
@@ -79,6 +78,7 @@ class Downloader {
                 })
             }
         }).on('timeout', () => {
+            this.processingCount--
             req.abort()
             signal.emit(signal.REQUEST_TIMEOUT, req)
             if (retryTimes >= this.options.MAX_RETRY) {
@@ -91,10 +91,9 @@ class Downloader {
             this.processingCount--
             this.engine.captureError(err)
         }).setTimeout(this.options.REQUEST_TIMEOUT * 1000)
-        if (request.data) {
-            req.write(request.data)
-        }
-        req.end()
+        req.end(request.data, () => {
+            this.processingCount++
+        })
     }
 
     /** 将请求添加到待下载队列等待被下载
