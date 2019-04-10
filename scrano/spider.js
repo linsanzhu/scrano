@@ -14,16 +14,16 @@ class Spider {
 
     _initProcess_() {
         // 将allow_domain转化为RegExp对象
-        for (const i in this.allow_domains) {
-            this.allow_domains[i] = new RegExp(this.allow_domains[i])
+        for (const i in this.allowDomains) {
+            this.allowDomains[i] = new RegExp(this.allowDomains[i])
         }
     }
 
     validateAllowDomain(url) {
-        if (this.allow_domains.length === 0) {
+        if (this.allowDomains.length === 0) {
             return true
         }
-        for (const ad of this.allow_domains) {
+        for (const ad of this.allowDomains) {
             if (ad.test(url)) {
                 return true
             }
@@ -32,11 +32,11 @@ class Spider {
     }
 
     * startRequests() {
-        if (this.start_urls.length < 1) {
+        if (this.startUrls.length < 1) {
             return []
         }
-        for (const startUrl of this.start_urls) {
-            if (this.allow_domains.length === 0 || this.validateAllowDomain(startUrl)) {
+        for (const startUrl of this.startUrls) {
+            if (this.allowDomains.length === 0 || this.validateAllowDomain(startUrl)) {
                 yield new Request(startUrl, this.parse)
             }
         }
