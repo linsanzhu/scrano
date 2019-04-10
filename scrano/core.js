@@ -34,7 +34,7 @@ class Core {
         this.counter = 0
 
         this.timer = setInterval(() => {
-            if (this.scheduler_status === 'watting_exit' && this.downloader_status === 'watting_exit') {
+            if (this.schedulerStatus === 'watting_exit' && this.downloaderStatus === 'watting_exit') {
                 this.counter++
                 if (this.counter > 10) {
                     this.stop()
