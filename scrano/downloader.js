@@ -15,9 +15,18 @@ class Downloader {
         this._process_ = this._process_.bind(this)
         this._autothrottle_ = this._autothrottle_.bind(this)
         this.fetch = this.fetch.bind(this)
-        this.counter = 0 // 用于记录空转次数,连续空转超过5次,即可确定确实没有可下载请求了, 随即发送信号通知引擎准备停止工作
+        this.counter = 0 // 用于记录空转次数,连续空转超过10次,即可确定确实没有可下载请求了, 随即发送信号通知引擎准备停止工作
         signal.emit(signal.INIT_DOWNLOADER)
         this._process_()
+        this.countTimer = setInterval(() => {
+            if (this.processingCount < 1 && this.waitingQueue.length < 1) {
+                this.counter++
+                if (this.counter > 10) {
+                    signal.emit(signal.DOWNLOADER_QUEUE_EMPTY)
+                    return
+                }
+            }
+        }, 500)
     }
 
     _autothrottle_() {
@@ -33,13 +42,7 @@ class Downloader {
             this.counter = 0
             const item = this.waitingQueue.splice(0, 1)
             this._request_(item[0])
-        } else if (this.processingCount < 1 && this.waitingQueue.length < 1) {
-            this.counter++
-            if (this.counter > 5) {
-                signal.emit(signal.DOWNLOADER_QUEUE_EMPTY)
-                return
-            }
-        }
+        } 
         const delay = this._autothrottle_()
         this.timer = setTimeout(this._process_, delay)
     }
@@ -111,6 +114,8 @@ class Downloader {
     stop() {
         this.timer && clearTimeout(this.timer)
         this.timer = null
+        this.countTimer && clearInterval(this.countTimer)
+        this.countTimer = null
     }
 }
 
