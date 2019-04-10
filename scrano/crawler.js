@@ -12,7 +12,7 @@ class Crawler {
             if (spiderName !== sn) {
                 continue
             }
-            const spider = this.options.SPIDER_MODULES[sn].from_crawler(this)
+            const spider = this.options.SPIDER_MODULES[sn].fromCrawler(this)
             this.engine.openSpider(spider)
             break
         }
