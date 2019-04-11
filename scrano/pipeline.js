@@ -46,15 +46,17 @@ class PipelineChain {
                     const result = pointer.item.processItem(item, spider)
                     if (result && !(result instanceof Item)) {
                         this.engine.schedule(item, spider)
-                        break
+                        return
                     }
+                    item = result || item
                 }
             } catch (err) {
                 if (err instanceof exceptions.DropItem) {
                     signal.emit(signal.ITEM_DROPPED, item, err, spider)                    
-                    break
+                    return
                 }
                 this.engine.captureError(err)
+                return
             }
             pointer = pointer.next
         }

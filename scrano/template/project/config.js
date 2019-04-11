@@ -1,21 +1,22 @@
 const path = require('path')
 const extensions = require('./extensions')
 const middlewares = require('./middlewares')
+const pipelines = require('./pipelines')
+
 
 const SPIDER_MIDDLEWARES = [ 
-
+    [ middlewares.SpiderMiddleware, 543, ],
 ]
 
 const DOWNLOAD_MIDDLEWARES = [
-    [ middlewares.DefaultRequestHeadersMiddleware, 0, ], 
+    [ middlewares.DownloadMiddleware, 543, ],
 ]
 
 const ITEM_PIPELINES = [
-
+    [ pipelines.Pipeline, 543, ],
 ]
 
 const EXTENSIONS = [
-    [ extensions.logger, 'on', ],
 ]
 
 // 开启日志文件

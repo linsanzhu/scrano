@@ -48,7 +48,7 @@ class DownloadMiddlewareChain {
                     result = pointer.middleware.processRequest({request, spider, })
                 }
             } catch (err) {
-                pointer.middleware.processExeption({request, exception: err, spider, }, pointer)
+                pointer.middleware.processException({request, exception: err, spider, }, pointer)
                 return
             }
             if (result instanceof Request) {
@@ -79,7 +79,7 @@ class DownloadMiddlewareChain {
                     result = pointer.middleware.processResponse({response, spider, })
                 }
             } catch (err) {
-                this.processExeption({request: response.request, exception: err, spider, }, pointer)
+                this.processException({request: response.request, exception: err, spider, }, pointer)
                 return
             }
             if (result instanceof Request) {
@@ -98,7 +98,7 @@ class DownloadMiddlewareChain {
      * 
      * @param {*} param0 
      */
-    processExeption({request, exception, spider, }, pointer = null) {
+    processException({request, exception, spider, }, pointer = null) {
         if (exception instanceof exceptions.IgnoreRequest) {
             signal.emit(signal.IGNORE_REQUEST, request, spider)
             return
@@ -106,7 +106,7 @@ class DownloadMiddlewareChain {
         pointer || (pointer = this.chain.prev)
         while (pointer.middleware) {
             if (pointer.middleware.processExeption) {
-                const result = pointer.middleware.processExeption({request, exception, spider, })
+                const result = pointer.middleware.processException({request, exception, spider, })
                 if (result instanceof Request) {
                     this.engine.schedule(result, spider)
                     return
