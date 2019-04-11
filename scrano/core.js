@@ -89,6 +89,13 @@ class Core {
         this.downloadMiddlewareChain.processResponse({response, spider, }, this.schedule)
     }
 
+    /** 用于下载器处理请求发生错误时提交错误给引擎
+     * 
+     */
+    reportError({request, exception, spider, }) {
+        this.downloadMiddlewareChain.processException({request, exception, spider, })
+    }
+
     /** 分发响应到spider, 分发途中由spider中间件处理
      * 
      * @for Core

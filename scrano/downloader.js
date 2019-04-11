@@ -94,7 +94,7 @@ class Downloader {
             this._request_({request, spider, }, deepth, retryTimes + 1)
         }).on('error', (err) => {
             this.processingCount--
-            this.engine.captureError(err)
+            this.engine.reportError({ request, exceptions: err, spider, })
         }).setTimeout(this.options.REQUEST_TIMEOUT * 1000)
         
         req.end(request.data, () => {
