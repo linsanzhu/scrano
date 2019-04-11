@@ -5,4 +5,4 @@ class DefaultRequestHeadersMiddleware {
     }
 }
 
-exports.DefaultRequestHeadersMiddleware = DefaultRequestHeadersMiddleware
+module.exports = DefaultRequestHeadersMiddleware

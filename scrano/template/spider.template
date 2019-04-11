@@ -1,0 +1,16 @@
+const spider = require('scrano').spider
+
+
+class ${SPIDER_NAME} extends spider.Spider {
+    constructor(options) {
+        super(options)
+        this.allowDomains = []
+        this.startUrls = []
+    }
+
+    * parse(response) {
+        
+    }
+}
+
+module.exports = ${SPIDER_NAME}

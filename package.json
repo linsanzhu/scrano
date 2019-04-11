@@ -7,6 +7,9 @@
     "preset": "eslint 'scrano/**/*.js' 'test/**/*.js'",
     "test": "jest --coverage"
   },
+  "bin": {
+    "scrano": "./scrano/commands/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/binzaq/scrano.git"

@@ -7,8 +7,7 @@ const SPIDER_MIDDLEWARES = [
 ]
 
 const DOWNLOAD_MIDDLEWARES = [
-    [ middlewares.ValidRequestMiddleware, 0, ],
-    [ middlewares.DefaultRequestHeadersMiddleware, 1, ], 
+    [ middlewares.DefaultRequestHeadersMiddleware, 0, ], 
 ]
 
 const ITEM_PIPELINES = [
@@ -79,32 +78,5 @@ const config = {
     MAX_RETRY,
 }
 
-const loadConfig = function(options) {
-    for (const key in config) {
-        if ([ 'SPIDER_MIDDLEWARES', 'DOWNLOAD_MIDDLEWARES', 'ITEM_PIPELINES', ].includes(key)) {
-            const cache = [ ...config[key], ...(options[key] ? options[key] : []), ].filter((x) => {
-                return x[1] !== 'off'
-            })
-            cache.sort((x, y) => {
-                return parseInt(x[1]) > parseInt(y[1])
-            })
-            config[key] = cache.map((x) => x[0])
-        } else if (Array.isArray(config[key])) {
-            config[key] = [ ...config[key], ...(options[key] ? options[key] : []), ]
-        } else if (config[key] instanceof Object) {
-            config[key] = Object.assign({}, config[key], options[key])
-        } else {
-            config[key] = options[key] || config[key]
-        }
-    }
-    for (const key in options) {
-        if (!config[key]) {
-            config[key] = options[key]
-        }
-    }
-    return config 
-}
 
-module.exports = {
-    loadConfig,
-}
+module.exports = config

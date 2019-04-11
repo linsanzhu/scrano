@@ -8,7 +8,7 @@ class Spider {
         this.allowDomains = []
         this.startUrls = []
         this.crawler = options.crawler
-        this.config = options
+        this.config = options.config
         this.validateAllowDomain = this.validateAllowDomain.bind(this)
     }
 
@@ -51,7 +51,7 @@ class Spider {
     }
 
     static fromCrawler (crawler) {
-        const instance = new this({crawler, options: crawler.options, })
+        const instance = new this({crawler, config: crawler.options, })
         instance._initProcess_()
         return instance
     }
