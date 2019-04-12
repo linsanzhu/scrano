@@ -1,6 +1,6 @@
 > ### What is scrano
 
-scrano 是一个用js编写,模仿python scrapy的爬虫框架,它在使用方法上力求与scrapy一致,让用户将注意力集中于如何接写网页,以及如何存储解析到的数据,而不用在意如何发送请求。
+scrano 是一个用js编写,模仿python scrapy的爬虫框架,它在使用方法上力求与scrapy一致,让用户将注意力集中于如何解析网页,以及如何存储解析到的数据,而不用在意如何发送请求。
 > ### Install
 
 ```
@@ -37,7 +37,7 @@ npm install -g scrano
 当你编写好spider以后,就可以执行
 
     scrano crawl <spider_name>
-    
+
 来启动抓取流程,这里需要注意, spider_name是你在配置文件中在SPIDER_MODULES中写入的键
 
 
