@@ -4,7 +4,9 @@ const spider = require('scrano').spider
 class ${SPIDER_NAME} extends spider.Spider {
     constructor(options) {
         super(options)
-        this.allowDomains = []
+        this.allowDomains = [ 
+            ${DOMAIN}, 
+        ]
         this.startUrls = []
     }
 
