@@ -64,6 +64,11 @@ class GenSpiderCommand extends CommandBase {
             return
         }
 
+        if (fs.existsSync('./config.js')) {
+            fs.mkdirSync(path.resolve('./spiders/'), {
+                recursive: true,
+            })
+        }
         const spiderPath = fs.existsSync('./config.js') ? path.resolve('./spiders/', spiderName + '.js') : path.resolve('./', spiderName + '.js')
         fs.readFile(template, (err, data) => {
             if (err) {
