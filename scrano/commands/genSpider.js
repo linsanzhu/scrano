@@ -53,7 +53,7 @@ class GenSpiderCommand extends CommandBase {
             force = true
         }
         let spiderName = null
-        let domain = null
+        let domain = []
         if (args.length === 1) {
             spiderName = args[0]
         } else if (args.length >= 2) {
