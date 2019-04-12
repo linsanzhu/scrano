@@ -1,5 +1,4 @@
 const path = require('path')
-const extensions = require('./extensions')
 const middlewares = require('./middlewares')
 const pipelines = require('./pipelines')
 
