@@ -3,13 +3,18 @@
 const CommandBase = require('./command')
 const { Crawler, } = require('../crawler')
 const path = require('path')
+const fs = require('fs')
 
 const getConfig = () => {
     let config = {}
+    if (!fs.existsSync(path.resolve('./config.js'))) {
+        console.log('cannot find config.js, be sure you are in a project folder')
+        return
+    }
     try {
         config = require(path.resolve('./config.js'))
     } catch (err) {
-        console.log('cannot find config.js, be sure you are in a project folder')
+        console.log(err)
         return
     }
     return config
