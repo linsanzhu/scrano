@@ -4,6 +4,10 @@ const middlewares = require('./middlewares')
 const pipelines = require('./pipelines')
 
 
+const SPIDER_MODULES = {
+
+}
+
 const SPIDER_MIDDLEWARES = [ 
     [ middlewares.SpiderMiddleware, 543, ],
 ]
@@ -62,6 +66,7 @@ const DEFAULT_REQUEST_HEADER = {
 const RETRY_TIMES = 3
 
 const config = {
+    SPIDER_MODULES,
     SPIDER_MIDDLEWARES,
     DOWNLOAD_MIDDLEWARES,
     ITEM_PIPELINES,
