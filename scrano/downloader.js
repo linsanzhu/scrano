@@ -60,7 +60,7 @@ class Downloader {
             throw new exceptions.RedirectError(`redirect limited less than ${this.options.MAX_REDIRECT_DEEPTH} times`)
             return undefined
         }
-        const h = request.protocol === 'http' ? http : https
+        const h = request.protocol === 'http:' ? http : https
         const req = h.request(request.meta.url, request.meta.options, (res) => {
             this.processingCount--
             if ((res.statusCode === 302 || res.statusCode === 301) && this.options.REDIRECT_ENABLED) {
