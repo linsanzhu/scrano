@@ -14,7 +14,7 @@ class CrawlCommand extends CommandBase {
     }
 
     run(...args) {
-        if (args.length < 1 || args.indexOf('--help') < 0 || args.indexOf('-h') < 0) {
+        if (args.length < 1 || args.indexOf('--help') >= 0 || args.indexOf('-h') >= 0) {
             this.printOptions()
             return
         }

@@ -74,8 +74,8 @@ class GenSpiderCommand extends CommandBase {
                 console.log('the spider is exist')
                 return
             }
-            data.replace('${SPIDER_NAME}', spiderName)
-            data.replace('${DOMAIN}', domain.length < 1 ? '' : domain.map((i) => '"' + i + '"').join(', '))
+            data = data.toString().replace(/\$\{SPIDER_NAME\}/g, spiderName)
+            data = data.toString().replace(/\$\{DOMAIN\}/g, domain.length < 1 ? '' : domain.map((i) => '"' + i + '"').join(', '))
             fs.writeFileSync(spiderPath, data)
         })
 
