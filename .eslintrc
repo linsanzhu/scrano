@@ -51,7 +51,7 @@
         "no-unused-vars": 0,
         "no-use-before-define": 2,
         "require-yield": 0,
-        "global-require": 2,
+        "global-require": 1,
         "handle-callback-err": [2, "^(err|error)$"],
         "no-new-require": 2,
         "array-bracket-spacing": [2, "always"],

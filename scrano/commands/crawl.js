@@ -1,4 +1,19 @@
+#!/usr/bin/env node
+
 const CommandBase = require('./command')
+const { Crawler, } = require('../crawler')
+const path = require('path')
+
+const getConfig = () => {
+    let config = {}
+    try {
+        config = require(path.resolve('./config.js'))
+    } catch (err) {
+        console.log('cannot find config.js, be sure you are in a project folder')
+        return
+    }
+    return config
+}
 
 class CrawlCommand extends CommandBase {
     constructor() {
@@ -18,7 +33,13 @@ class CrawlCommand extends CommandBase {
             this.printOptions()
             return
         }
-        
+        const spiderName = args[0]
+        const config = getConfig()
+        if (!config) {
+            return
+        }
+        const crawler = new Crawler(config)
+        crawler.crawl(spiderName)
     }
 }
 
