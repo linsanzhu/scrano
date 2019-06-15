@@ -7,9 +7,8 @@ test('set-proxy', () => {
     const request = new Request('http://www.baidu.com', () => {
         //
     })
-    request.setProxy({host: '111.177.190.42', port: 9999, })
-    fetch(request.url, request.meta).then((response) => {
-        console.log(response.statusText)
+    request.setProxy({host: '112.80.41.85', port: 8888, })
+    return fetch(request.url, request.meta).then((response) => {
         expect(response.ok).toBeTruthy()
     })
 })
