@@ -1,10 +1,9 @@
-const http = require('http')
-const https = require('https')
 const { Request, } = require('./request')
 const { Response, } = require('./response')
 const exceptions = require('./exception')
 const signal = require('./signal')
-
+const nodeFetch = require('node-fetch')
+const {FetchError, Headers, } = nodeFetch
 
 class Downloader {
     constructor(engine, options) {
@@ -42,7 +41,32 @@ class Downloader {
         if (this.processingCount < this.options.CONCURRENT_REQUESTS && this.waitingQueue.length > 0) {
             this.counter = 0
             const item = this.waitingQueue.splice(0, 1)
-            this._request_(item[0])
+
+            nodeFetch(item[0].url, Object.assign({}, item[0].meta, {
+                follow: this.options.MAX_REDIRECT_DEEPTH, 
+                timeout: this.options.REQUEST_TIMEOUT,
+            })).then((response) => {
+                if (response.ok) {
+                    return 1
+                } else {
+                    return 
+                }
+            }).then((response) => {
+                return response
+            }).catch((err) => {
+                if (err instanceof FetchError && err.type === "request-timeout") {
+                    if (item[0].retried >= this.options.MAX_RETRY) {
+                        this.engine.captureError(new exceptions.MaxRetryTimesError(`The request ${item[0]} has been retried ${this.options.MAX_RETRY} times, and will be droped`))
+                        return
+                    }
+                    signal.emit(signal.REQUEST_TIMEOUT, err.message)
+                    item[0].retried++
+                    signal.emit(signal.RETRY_REQUEST, item[0])
+                    this.waitingQueue.push(item[0])
+                } else {
+                    this.engine.captureError(err)
+                }
+            })
         } 
         const delay = this._autothrottle_()
         this.timer = setTimeout(this._process_, delay)
@@ -53,53 +77,6 @@ class Downloader {
             signal.emit(signal.DOWNLOADER_QUEUE_EMPTY)
         }
         this.engine.deliverDownloadResult({response, spider, })
-    }
-
-    _request_({request, spider, }, deepth = 0, retryTimes = 0) {
-        if (deepth >= this.options.MAX_REDIRECT_DEEPTH) {
-            throw new exceptions.RedirectError(`redirect limited less than ${this.options.MAX_REDIRECT_DEEPTH} times`)
-            return undefined
-        }
-        const h = request.protocol === 'http:' ? http : https
-        const req = h.request(request.meta.url, request.meta.options, (res) => {
-            this.processingCount--
-            if ((res.statusCode === 302 || res.statusCode === 301) && this.options.REDIRECT_ENABLED) {
-                const newRequest = request.redirect(res.headers['Location'] || res.headers['location'])
-                signal.emit(signal.REQUEST_REDIRECTED, request, newRequest, spider)
-
-                const response = this._request_({request: newRequest, spider, }, deepth + 1)
-                if (response) {
-                    this._deliver_({response, spider, })
-                }
-            } else {
-                const response = new Response(request, res)
-                const bufferCache = [] 
-                res.on('data', (chunk) => {
-                    bufferCache.push(chunk)
-                })
-                res.on('end', () => {
-                    response.setBody(Buffer.concat(bufferCache))
-                    this._deliver_({response, spider, })
-                })
-            }
-        }).on('timeout', () => {
-            this.processingCount--
-            req.abort()
-            signal.emit(signal.REQUEST_TIMEOUT, req)
-            if (retryTimes >= this.options.MAX_RETRY) {
-                signal.emit(signal.REQUEST_DROPPED, request)
-                return
-            }
-            signal.emit(signal.RETRY_REQUEST, request, retryTimes + 1)
-            this._request_({request, spider, }, deepth, retryTimes + 1)
-        }).on('error', (err) => {
-            this.processingCount--
-            this.engine.reportError({ request, exceptions: err, spider, })
-        }).setTimeout(this.options.REQUEST_TIMEOUT * 1000)
-        
-        req.end(request.data, () => {
-            this.processingCount++
-        })
     }
 
     /** 将请求添加到待下载队列等待被下载

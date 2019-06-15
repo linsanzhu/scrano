@@ -49,6 +49,20 @@ class ParamError extends Error {
     }
 }
 
+class TimeoutError extends Error {
+    constructor(message) {
+        super()
+        this.message = message
+    }
+}
+
+class MaxRetryTimesError extends Error {
+    constructor(message) {
+        super()
+        this.message = message
+    }
+}
+
 module.exports = {
     NotImplementedError,
     ValueError,
@@ -57,4 +71,6 @@ module.exports = {
     IgnoreRequest,
     RedirectError,
     ParamError,
+    TimeoutError,
+    MaxRetryTimesError,
 }

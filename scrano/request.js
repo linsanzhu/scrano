@@ -1,35 +1,31 @@
 const exceptions = require('./exception')
+const HttpProxyAgent = require('http-proxy-agent')
+const HttpsProxyAgent = require('https-proxy-agent')
+
 
 class Request {
-    constructor(url, callback, options = {method: 'GET', headers: {}, data: undefined, }) {
+    constructor(url, callback, options = {method: 'GET', headers: {}, }) {
         const _ = /^(\S+:)\/\/[\s\S]+/.exec(url)
-        this.protocol = (_ && _.length > 1) ? _[1] : 'http:'
-        options.protocol = this.protocol
 
         this.callback = callback
+        
+        this.url = url
 
-        this.data = options.data
-
-        delete options.data
-
-        this.meta = {
-            url,
-            options: Object.assign({}, options),
-        }
+        this.retried = 0
+        
+        this.meta = Object.assign({}, options)
     }
 
     setHeaders(headers) {
-        this.meta.options.headers = Object.assign({}, this.meta.options.headers, headers)
+        this.meta.headers = Object.assign({}, this.meta.headers, headers)
     }
 
-    setProxy(host = (() => {throw new exceptions.ParamError('you must specify host')})(), 
-        port = (() => {throw new exceptions.ParamError('you must specify port')})()) {
-        this.meta.options.host = host
-        this.meta.options.port = port
+    setProxy(proxy) {
+        this.meta.agent = /^https.+$/.test(this.url) ? new HttpsProxyAgent(proxy) : new HttpProxyAgent(proxy) 
     }
 
     toString() {
-        return `<Request ${this.meta.url}>`
+        return `<Request ${this.url}>`
     }
 
     redirect(url) {

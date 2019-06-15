@@ -7,7 +7,7 @@ test('from-crawler', () => {
     const spider = Spider.fromCrawler(crawler)
     spider.startUrls = [ 'http://www.baidu.com', ]
     for (const req of spider.startRequests()) {
-        expect(req.meta.url).toBe('http://www.baidu.com')
+        expect(req.url).toBe('http://www.baidu.com')
     }
 }) 
 
