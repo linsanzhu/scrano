@@ -36,6 +36,7 @@ test('set-proxy', () => {
     })
     request.setProxy({host: 'localhost', port: 8080, })
     return fetch(request.url, request.meta).then((response) => {
+        console.log(response)
         expect(response.ok).toBeTruthy()
     })
 })
