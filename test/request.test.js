@@ -9,6 +9,7 @@ test('set-proxy', () => {
     })
     request.setProxy({host: '111.177.190.42', port: 9999, })
     fetch(request.url, request.meta).then((response) => {
+        console.log(response.statusText)
         expect(response.ok).toBeTruthy()
     })
 })
