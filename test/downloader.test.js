@@ -12,6 +12,8 @@ test('test-request-url', () => {
     downloader = new Downloader(engine, {
         MAX_REDIRECT_DEEPTH: 2,
         REQUEST_TIMEOUT: 30000,
+        AUTOTHROTTLE_ENABLED: true,
+        AUTOTHROTTLE_MAX_DELAY: 10,
     })
-    return downloader.fetch(new Request('http://www.baidu.com', console.log), null)
+    downloader.fetch(new Request('http://www.baidu.com', console.log), null)
 })
