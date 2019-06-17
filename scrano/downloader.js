@@ -44,11 +44,17 @@ class Downloader {
 
             nodeFetch(item[0].request.url, Object.assign({}, item[0].request.meta, {
                 follow: this.options.MAX_REDIRECT_DEEPTH, 
-                timeout: this.options.REQUEST_TIMEOUT,
+                timeout: this.options.REQUEST_TIMEOUT * 1000,
             })).then((response) => {
                 if (response.ok) {
-                    const _res_ = new Response(item[0].request, response)
-                    this._deliver_({response: _res_, spider: item[0].spider, })
+                    response.text().then((doc) => {
+                        const _res_ = new Response(item[0].request, response)
+                        _res_.docString = doc
+                        this._deliver_({response: _res_, spider: item[0].spider, })
+                    }).catch(() => {
+                        const _res_ = new Response(item[0].request, response)
+                        this._deliver_({response: _res_, spider: item[0].spider, })
+                    })
                 } else {
                     throw Error(response.statusText)
                 }
