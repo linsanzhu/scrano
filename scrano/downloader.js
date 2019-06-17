@@ -41,11 +41,12 @@ class Downloader {
         if (this.processingCount < this.options.CONCURRENT_REQUESTS && this.waitingQueue.length > 0) {
             this.counter = 0
             const item = this.waitingQueue.splice(0, 1)
-
+            this.processingCount++
             nodeFetch(item[0].request.url, Object.assign({}, item[0].request.meta, {
                 follow: this.options.MAX_REDIRECT_DEEPTH, 
                 timeout: this.options.REQUEST_TIMEOUT * 1000,
             })).then((response) => {
+                this.processingCount--
                 if (response.ok) {
                     response.text().then((doc) => {
                         const _res_ = new Response(item[0].request, response)
@@ -59,6 +60,7 @@ class Downloader {
                     throw Error(response.statusText)
                 }
             }).catch((err) => {
+                this.processingCount--
                 if (err instanceof FetchError && err.type === "request-timeout") {
                     if (item[0].request.retried >= this.options.MAX_RETRY) {
                         this.engine.captureError(new exceptions.MaxRetryTimesError(`The request ${item[0]} has been retried ${this.options.MAX_RETRY} times, and will be droped`))
