@@ -30,11 +30,11 @@ class Request {
 
     redirect(url) {
         const headers = {
-            'refer': this.meta.url,
+            'refer': this.url,
         }
         return new Request(url, 
             this.callback, 
-            Object.assign({}, this.meta.options, {data: this.data, headers, })
+            Object.assign({}, this.meta, {data: this.data, headers, })
         )
     }
 }

@@ -10,7 +10,6 @@ http.createServer(function(req, res) {
 
     const proxyRequest = http.request(options, function(proxyResponse) {
         proxyResponse.on('data', function(chunk) {
-            console.log('proxyResponse length:', chunk.length)
             res.write(chunk, 'binary')
         })
         proxyResponse.on('end', function() {
@@ -36,7 +35,6 @@ test('set-proxy', () => {
     })
     request.setProxy({host: 'localhost', port: 8080, })
     return fetch(request.url, request.meta).then((response) => {
-        console.log(response)
         expect(response.ok).toBeTruthy()
     })
 })

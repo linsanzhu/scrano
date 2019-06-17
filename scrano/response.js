@@ -4,10 +4,10 @@ class Response {
     constructor(request, response) {
         this.request = request
         this.meta = response
-        this.body = null
     }
-    setBody(body) {
-        this.body = body
+
+    body() {
+        return this.meta.buffer()
     }
 
     xpath(selector) {

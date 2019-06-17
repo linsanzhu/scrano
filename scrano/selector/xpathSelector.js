@@ -1,5 +1,5 @@
 const xpath = require('xpath')
-const {DOMParser, } = require('xmldom')
+const {DOMParser, XMLSerializer, } = require('xmldom')
 const exceptions = require('../exception')
 
 
@@ -31,7 +31,15 @@ class XPathSelector {
                 }
             }
         }
-        return new XPathSelector(nodes)
+        const res = new XPathSelector(nodes)
+        return new Proxy(res, {
+            get: function(target, propKey, receiver) {
+                if (/^\d+$/.test(propKey) && parseInt(propKey) < target.doc.length) {
+                    return new XPathSelector(new XMLSerializer().serializeToString(target.doc[parseInt(propKey)]))
+                }
+                return Reflect.get(target, propKey, receiver)
+            },
+        })
     }
 
     extract() {

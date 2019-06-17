@@ -42,26 +42,25 @@ class Downloader {
             this.counter = 0
             const item = this.waitingQueue.splice(0, 1)
 
-            nodeFetch(item[0].url, Object.assign({}, item[0].meta, {
+            nodeFetch(item[0].request.url, Object.assign({}, item[0].request.meta, {
                 follow: this.options.MAX_REDIRECT_DEEPTH, 
                 timeout: this.options.REQUEST_TIMEOUT,
             })).then((response) => {
                 if (response.ok) {
-                    return 1
+                    const _res_ = new Response(item[0].request, response)
+                    this._deliver_({response: _res_, spider: item[0].spider, })
                 } else {
-                    return 
+                    throw Error(response.statusText)
                 }
-            }).then((response) => {
-                return response
             }).catch((err) => {
                 if (err instanceof FetchError && err.type === "request-timeout") {
-                    if (item[0].retried >= this.options.MAX_RETRY) {
+                    if (item[0].request.retried >= this.options.MAX_RETRY) {
                         this.engine.captureError(new exceptions.MaxRetryTimesError(`The request ${item[0]} has been retried ${this.options.MAX_RETRY} times, and will be droped`))
                         return
                     }
                     signal.emit(signal.REQUEST_TIMEOUT, err.message)
-                    item[0].retried++
-                    signal.emit(signal.RETRY_REQUEST, item[0])
+                    item[0].request.retried++
+                    signal.emit(signal.RETRY_REQUEST, item[0].request)
                     this.waitingQueue.push(item[0])
                 } else {
                     this.engine.captureError(err)
