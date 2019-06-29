@@ -5,7 +5,7 @@
   "main": "./scrano/index.js",
   "scripts": {
     "preset": "eslint 'scrano/**/*.js' 'test/**/*.js'",
-    "test": "jest --coverage"
+    "test": "jest --coverage --detectOpenHandles"
   },
   "bin": {
     "scrano": "./scrano/commands/index.js"

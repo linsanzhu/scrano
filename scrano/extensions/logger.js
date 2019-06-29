@@ -65,7 +65,11 @@ class LoggerExtension {
         })
 
         signal.connect(signal.IGNORE_REQUEST, (request, spider) => {
-            logger._logger_.info(`ignore request ${request} from spider ${spider}`)
+            if (typeof request === 'string') {
+                logger._logger_.info(request)
+            } else {
+                logger._logger_.info(`ignore request ${request} from spider ${spider}`)
+            }
         })
 
         signal.connect(signal.SPIDER_OPENED, (spider) => {
@@ -92,8 +96,8 @@ class LoggerExtension {
             logger._logger_.debug(`timeout with request ${request}`)
         })
 
-        signal.connect(signal.RETRY_REQUEST, (request, times) => {
-            logger._logger_.debug(`retry request ${request} ${times}${times < 4 ? [ 'st', 'nd', 'rd', ][times] : 'th'} time`)
+        signal.connect(signal.RETRY_REQUEST, (request, reason) => {
+            logger._logger_.debug(`Retrying ${request} (failed ${request.retried + 1}d times): ${reason}`)
         })
     }
 }

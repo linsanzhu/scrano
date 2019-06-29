@@ -1,14 +1,17 @@
 const path = require('path')
 const extensions = require('./extensions')
-const middlewares = require('./middlewares')
+const downloadmiddlewares = require('./downloadmiddlewares')
 
 const SPIDER_MIDDLEWARES = [ 
 
 ]
 
 const DOWNLOAD_MIDDLEWARES = [
-    [ middlewares.ValidRequestMiddleware, 0, ],
-    [ middlewares.DefaultRequestHeadersMiddleware, 1, ], 
+    [ downloadmiddlewares.ValidRequestMiddleware, 0, ],
+    [ downloadmiddlewares.DefaultRequestHeadersMiddleware, 1, ], 
+    [ downloadmiddlewares.DownloadTimeoutMiddleware, 2, ],
+    [ downloadmiddlewares.RedirectMiddleware, 3, ],
+    [ downloadmiddlewares.RetryMiddleware, 500, ],
 ]
 
 const ITEM_PIPELINES = [
@@ -25,17 +28,22 @@ const LOG_TO_FILE = false
 // 日志文件存放目录, 仅 LOG_TO_FILE = true 时有效
 const LOG_DIR = path.resolve('./log')
 
-// 是否允许301或者302重定向，默认开启
-const REDIRECT_ENABLED = true
-
 // 重定向最大深度, 仅在 REDIRECT_ENABLED = true 时有效, 默认3
 const MAX_REDIRECT_DEEPTH = 3
 
 // 超时时间(秒)
 const REQUEST_TIMEOUT = 120
 
+// 是否启用重试
+const RETRY_ENABLED = true
+
 // 最大重试次数
-const MAX_RETRY = 3
+const MAX_RETRY = 2
+
+// 需要重试的响应状态码
+const RETRY_HTTP_CODES = [
+    500, 502, 503, 504, 522, 524, 408, 429, 
+]
 
 // 最大同时请求数
 const CONCURRENT_REQUESTS = 32
@@ -67,13 +75,14 @@ const config = {
     ITEM_PIPELINES,
     LOG_TO_FILE,
     LOG_DIR,
-    REDIRECT_ENABLED,
     MAX_REDIRECT_DEEPTH,
     AUTOTHROTTLE_ENABLED,
     AUTOTHROTTLE_MAX_DELAY,
     CONCURRENT_REQUESTS,
     DEFAULT_REQUEST_HEADER,
+    RETRY_ENABLED, 
     RETRY_TIMES,
+    RETRY_HTTP_CODES,
     EXTENSIONS,
     REQUEST_TIMEOUT,
     MAX_RETRY,

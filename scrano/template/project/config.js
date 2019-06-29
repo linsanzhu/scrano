@@ -28,9 +28,6 @@ const LOG_TO_FILE = false
 // 日志文件存放目录, 仅 LOG_TO_FILE = true 时有效
 const LOG_DIR = path.resolve('./log')
 
-// 是否允许301或者302重定向，默认开启
-const REDIRECT_ENABLED = true
-
 // 重定向最大深度, 仅在 REDIRECT_ENABLED = true 时有效, 默认3
 const MAX_REDIRECT_DEEPTH = 3
 
@@ -71,7 +68,6 @@ const config = {
     ITEM_PIPELINES,
     LOG_TO_FILE,
     LOG_DIR,
-    REDIRECT_ENABLED,
     MAX_REDIRECT_DEEPTH,
     AUTOTHROTTLE_ENABLED,
     AUTOTHROTTLE_MAX_DELAY,

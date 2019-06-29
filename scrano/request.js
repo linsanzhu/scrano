@@ -5,8 +5,6 @@ const HttpsProxyAgent = require('https-proxy-agent')
 
 class Request {
     constructor(url, callback, options = {method: 'GET', headers: {}, }) {
-        const _ = /^(\S+:)\/\/[\s\S]+/.exec(url)
-
         this.callback = callback
         
         this.url = url

@@ -1,5 +1,10 @@
 class DownloadMiddleware {
 
+    static init(options) {
+        const instance = new this()
+        return instance 
+    }
+
     /** 在请求进入下载器之前处理请求
      * 
      * @param {Request} request 待处理的请求
@@ -9,7 +14,7 @@ class DownloadMiddleware {
      * @returns {*} 将会把request沿着中间件链路继续向下传递, 直到传递给下载器
      * @throws {IgnoreRequest} 将该请求丢弃,不再向下载器传递
      */
-    static processRequest({request, spider, }) {
+    processRequest({request, spider, }) {
         //
     }
 
@@ -21,7 +26,7 @@ class DownloadMiddleware {
      * @returns {Request} 将交给调度器等待调度
      * @throws {IgnoreRequest} 忽略该响应
      */
-    static processResponse({response, spider, }) {
+    processResponse({response, spider, }) {
         //
     }
 
@@ -31,7 +36,7 @@ class DownloadMiddleware {
      * @param {Error} exception
      * @param {Spider} spider
      */
-    static processException({request, exception, spider, }) {
+    processException({request, exception, spider, }) {
         //
     }
 }
@@ -39,13 +44,18 @@ class DownloadMiddleware {
 
 class SpiderMiddleware {
 
+    static init(options) {
+        const instance = new this()
+        return instance
+    }
+    
     /** 响应被传递给spider进行处理前调用
      * 
      * @param {Response} response 将要交给spider解析的响应
      * @param {Spider} spider 
      * @returns {null/undefined} 
      */
-    static processSpiderInput({response, spider, }) {
+    processSpiderInput({response, spider, }) {
         //
     }
 
@@ -55,7 +65,7 @@ class SpiderMiddleware {
      * @param {any} result spider交付的结果
      * @param {Spider} spider
      */
-    static processSpiderOutput({response, result, spider, }) {
+    processSpiderOutput({response, result, spider, }) {
         //
     }
 
@@ -65,7 +75,7 @@ class SpiderMiddleware {
      * @param {Error} exception
      * @param {Spider} spider
      */
-    static processSpiderException({response, exceptions, spider, }) {
+    processSpiderException({response, exceptions, spider, }) {
         //
     }
 
@@ -75,7 +85,7 @@ class SpiderMiddleware {
      * @param {Spider} spider 
      * @returns {Iterable}
      */
-    static processStartRequests(startRequests, spider) {
+    processStartRequests(startRequests, spider) {
         return startRequests
     }
 }

@@ -24,7 +24,7 @@ class DownloadMiddlewareChain {
         this.engine = engine
         this.chain = new ChainNode()
         for (const md of downloadMiddlewares) {
-            const chainNode = new ChainNode({middleware: md, })
+            const chainNode = new ChainNode({middleware: md.init(this.engine.options), })
             this.chain.prev.setNext(chainNode)
             chainNode.setPrev(this.chain.prev)
             this.chain.setPrev(chainNode)

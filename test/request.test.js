@@ -4,7 +4,7 @@ const fetch = require('node-fetch')
 const http = require("http")
 const url = require("url")
 
-http.createServer(function(req, res) {
+const server = http.createServer(function(req, res) {
     const options = url.parse(req.url)
     options.headers = req.headers
 
@@ -27,15 +27,17 @@ http.createServer(function(req, res) {
         proxyRequest.end()
     })
 
-}).listen(8080)
+})
 
 test('set-proxy', () => {
     const request = new Request('http://www.baidu.com', () => {
         //
     })
+    server.listen(8080)
     request.setProxy({host: 'localhost', port: 8080, })
     return fetch(request.url, request.meta).then((response) => {
         expect(response.ok).toBeTruthy()
+        server.close()
     })
 })
 
