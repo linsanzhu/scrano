@@ -1,5 +1,5 @@
 const signal = require('./signal')
-const { Request, } = require('./request')
+const { Request, } = require('./http/request')
 const { Item, } = require('./item')
 
 class ChainNode {

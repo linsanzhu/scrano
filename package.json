@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/binzaq/scrano#readme",
   "dependencies": {
+    "encoding": "^0.1.12",
     "http-proxy-agent": "^2.1.0",
     "https-proxy-agent": "^2.2.1",
     "log4js": "^4.1.0",

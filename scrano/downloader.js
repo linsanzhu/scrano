@@ -1,5 +1,5 @@
-const { Request, } = require('./request')
-const { Response, } = require('./response')
+const { Request, } = require('./http/request')
+const { Response, } = require('./http/response')
 const signal = require('./signal')
 const nodeFetch = require('node-fetch')
 
@@ -45,12 +45,16 @@ class Downloader {
             ).then((response) => {
                 this.processingCount--
                 if (response.ok) {
-                    response.text().then((doc) => {
-                        const _res_ = new Response(item[0].request, response)
-                        _res_.docString = doc
-                        this._deliver_({response: _res_, spider: item[0].spider, })
-                    }).catch(() => {
-                        const _res_ = new Response(item[0].request, response)
+                    response.buffer().then((buffer) => {
+                        const _res_ = new Response({
+                            url: response.url,
+                            status: response.status,
+                            statusText: response.statusText,
+                            headers: response.headers,
+                            request: item[0].request,
+                            body: buffer,
+                            rawResponse: response,
+                        })
                         this._deliver_({response: _res_, spider: item[0].spider, })
                     })
                 } else {

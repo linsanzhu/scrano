@@ -69,7 +69,6 @@
         "indent": [2, 4, {
             "SwitchCase": 1
         }],
-        "linebreak-style": [1, "unix"],
         "lines-around-comment": [1, {
             "beforeBlockComment": true
         }],

@@ -1,6 +1,6 @@
 const signal = require('./signal')
-const {Request, } = require('./request')
-const {Response, } = require('./response')
+const {Request, } = require('./http/request')
+const {Response, } = require('./http/response')
 const {Item, } = require('./item')
 
 class Scheduler {

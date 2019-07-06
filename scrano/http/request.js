@@ -1,4 +1,4 @@
-const exceptions = require('./exception')
+const exceptions = require('../exception')
 const HttpProxyAgent = require('http-proxy-agent')
 const HttpsProxyAgent = require('https-proxy-agent')
 

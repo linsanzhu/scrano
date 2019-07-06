@@ -1,4 +1,4 @@
-const { Request, } = require('../scrano/request')
+const { Request, } = require('../scrano/http/request')
 const exceptions = require('../scrano/exception')
 const fetch = require('node-fetch')
 const http = require("http")

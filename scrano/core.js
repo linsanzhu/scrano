@@ -3,7 +3,7 @@ const { Downloader, } = require('./downloader')
 const { SpiderMiddlewareChain, } = require('./spiderMiddleware')
 const { DownloadMiddlewareChain, } = require('./downloadMiddleware')
 const { PipelineChain, } = require('./pipeline')
-const { Response, } = require('./response')
+const { Response, } = require('./http/response')
 const signal = require('./signal')
 
 class Core {

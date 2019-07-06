@@ -1,4 +1,4 @@
-const {Response, } = require('../scrano/response')
+const {Response, } = require('../scrano/http/response')
 const nodeFetch = require('node-fetch')
 
 test('response-test', () => {

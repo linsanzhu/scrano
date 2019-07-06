@@ -1,6 +1,6 @@
 const exceptions = require('./exception')
-const { Response, } = require('./response')
-const { Request, } = require('./request')
+const { Response, } = require('./http/response')
+const { Request, } = require('./http/request')
 const signal = require('./signal')
 
 class ChainNode {
