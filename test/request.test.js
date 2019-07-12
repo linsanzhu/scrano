@@ -66,3 +66,11 @@ test('request-to-string', () => {
 })
 
 
+test('get-host', () => {
+    const request = new Request('http://www.baidu.com', () => {
+        //
+    })
+    expect(`${request.getHost()}`).toBe('www.baidu.com')
+    request.url = 'https://test.domain.cn'
+    expect(`${request.getHost()}`).toBe('test.domain.cn')
+})

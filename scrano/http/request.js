@@ -18,6 +18,14 @@ class Request {
         this.meta.headers = Object.assign({}, this.meta.headers, headers)
     }
 
+    getHost() {
+        return /^https?.+?([\w.]+)$/.exec(this.url).pop()
+    }
+
+    getDomain(level = 0) {
+        const host = this.getHost()
+    }
+
     setProxy(proxy) {
         this.meta.agent = /^https.+$/.test(this.url) ? new HttpsProxyAgent(proxy) : new HttpProxyAgent(proxy) 
     }
