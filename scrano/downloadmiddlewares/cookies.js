@@ -19,6 +19,7 @@ class CookiesMiddleware {
             return
         }
         this.cookieJar.extractCookies(response, response.request)
+        return response
     }
 }
 
