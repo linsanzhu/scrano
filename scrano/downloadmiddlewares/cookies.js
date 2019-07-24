@@ -1,4 +1,4 @@
-import { CookieJar, } from 'http/cookies'
+import { CookieJar, } from '../http/cookies'
 
 class CookiesMiddleware {
     static init(options) {
