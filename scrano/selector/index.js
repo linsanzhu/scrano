@@ -1,4 +1,4 @@
-const {XPathSelector, } = require('./xpathSelector')
+const { XPathSelector, } = require('./xpathSelector')
 
 
 module.exports = {

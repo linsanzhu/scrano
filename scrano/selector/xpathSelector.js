@@ -1,5 +1,5 @@
 const xpath = require('xpath')
-const {DOMParser, XMLSerializer, } = require('xmldom')
+const { DOMParser, XMLSerializer, } = require('xmldom')
 const exceptions = require('../exception')
 
 

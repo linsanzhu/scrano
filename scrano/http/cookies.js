@@ -21,13 +21,14 @@ class Cookie {
         const [ value, name, ] = /^(\S+?)=(\S+)$/i.test(fields[0]).reverse()
         instance.value = value, instance.name = name
         for (const field of fields.slice(1)) {
-            const [ attr, attrValue, ] = field.split('=')
-            if (value !== undefined) {
-                instance[attr] = attrValue
+            const [ attr, attrValue, ] = field.split(/\s*=\s*/)
+            if (attrValue !== undefined) {
+                instance[attr.toLowerCase()] = attrValue
             } else {
-                instance[attr] = true
+                instance[attr.toLowerCase()] = true
             }
         }
+
         return instance
     }
 
@@ -41,7 +42,7 @@ class Cookie {
             return (maxAge * 1000 + this._addTime_) <= (new Date()).getTime() 
         } else {
             const expires = getattr(this.attributes, 'expires')
-            if ( expires ) {
+            if (expires) {
                 return (new Date(expires)) <= Date()
             }
             return false
@@ -56,7 +57,7 @@ class Cookie {
  */
 class CookieJar {
     constructor() {
-        this.storage = new Map()
+        this.storage = []
     }
 
     /**
@@ -71,7 +72,8 @@ class CookieJar {
             const co = Cookie.fromCookieHeaderStr(cookie)
             if (!co.domain) {
                 co.domain = request.getDomain(1)
-            } else if ((new RegExp(`${co.domain}$`)).test(request.getDomain())) {
+            }
+            if ((new RegExp(`${co.domain}$`)).test(request.getHost())) {
                 this.setCookie(co)
             }
             return co
@@ -83,7 +85,17 @@ class CookieJar {
      * @param {Request} request 
      */
     addCookieHeader(request) {
-
+        for (const cookie of this.storage) {
+            if (new RegExp(`${cookie.domain}$`).test(request.getHost())) {
+                if (!(cookie.path && new RegExp(cookie.path).test(request.url))) {
+                    continue
+                }
+                if (cookie.isExpired()) {
+                    continue
+                }
+                request.setCookie(cookie)
+            }
+        }
     }
 
     setCookie(cookie) {
@@ -93,11 +105,18 @@ class CookieJar {
         if (!(cookie instanceof Cookie)) {
             throw new TypeError('cookie must be an instance of class Cookie')
         }
-
+        for (const i in this.storage) {
+            const _co_ = this.storage[i]
+            if (cookie.name === _co_.name) {
+                this.storage[i] = cookie
+                return
+            }
+        }
+        this.storage.push(cookie)
     }
 
     clear(domain = null, path = null, name = null) {
-        return 0
+        throw new Error('Not implement')
     }
 
     /**
