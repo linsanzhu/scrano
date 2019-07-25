@@ -30,7 +30,7 @@ npm install -g scrano
 
     scrano genspider <spider_name>
 
-这条命令仅仅是在当前项目添加一个spider文件,为了能够使用这个spider,你还需要手动在config.js文件中的SPIDER_MODULES项目下添加响应条目,其中键是spider的名字,用于crawl命令,值是该spider的类名
+这条命令仅仅是在当前项目添加一个spider文件,为了能够使用这个spider,你还需要手动在config.js文件中的SPIDER_MODULES项目下添加相应条目,其中键是spider的名字,用于crawl命令,值是该spider的类名
 
 - 开始爬取
 

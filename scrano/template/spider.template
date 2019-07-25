@@ -5,7 +5,7 @@ class ${SPIDER_NAME} extends spider.Spider {
     constructor(options) {
         super(options)
         this.allowDomains = [ 
-            ${DOMAIN}, 
+            ${DOMAIN}
         ]
         this.startUrls = []
     }
