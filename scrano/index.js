@@ -6,6 +6,7 @@ const exceptions = require('./exception')
 const item = require('./item')
 const request = require('./http/request')
 const response = require('./http/response')
+const http = require('./http')
 const scheduler = require('./scheduler').default
 const spider = require('./spider')
 const signal = require('./signal')
@@ -35,4 +36,5 @@ module.exports = {
     request,
     response,
     crawler,
+    http,
 }
