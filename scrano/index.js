@@ -4,8 +4,8 @@ const crawler = require('./crawler')
 const downloader = require('./downloader')
 const exceptions = require('./exception')
 const item = require('./item')
-const request = require('./http/request')
-const response = require('./http/response')
+const Request = require('./http/request').Request
+const Response = require('./http/response').Response
 const http = require('./http')
 const scheduler = require('./scheduler').default
 const spider = require('./spider')
@@ -33,8 +33,8 @@ module.exports = {
     common,
     spider,
     item,
-    request,
-    response,
+    Request,
+    Response,
     crawler,
     http,
 }
