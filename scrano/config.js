@@ -66,9 +66,6 @@ const DEFAULT_REQUEST_HEADER = {
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2763.0 Safari/537.36",
 }
 
-// 请求失败的最大重试次数
-const RETRY_TIMES = 3
-
 const config = {
     SPIDER_MIDDLEWARES,
     DOWNLOAD_MIDDLEWARES,
@@ -81,7 +78,6 @@ const config = {
     CONCURRENT_REQUESTS,
     DEFAULT_REQUEST_HEADER,
     RETRY_ENABLED, 
-    RETRY_TIMES,
     RETRY_HTTP_CODES,
     EXTENSIONS,
     REQUEST_TIMEOUT,
