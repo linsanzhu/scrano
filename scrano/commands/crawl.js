@@ -12,6 +12,7 @@ const getConfig = () => {
         return
     }
     try {
+        // eslint-disable-next-line global-require
         config = require(path.resolve('./config.js'))
     } catch (err) {
         console.log(err)

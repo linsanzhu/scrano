@@ -1,4 +1,4 @@
-import { CookieJar, } from '../http/cookies'
+const CookieJar = require('../http/cookies').CookieJar
 
 class CookiesMiddleware {
     static init(options) {
