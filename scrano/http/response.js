@@ -59,7 +59,7 @@ class Response {
         } else {
             charset = 'utf-8'
         }
-        return this.convertBody(this.body, 'UTF-8', charset).toString()
+        return convert(this.body, 'UTF-8', charset).toString()
     }
 
     xpath(selector) {
