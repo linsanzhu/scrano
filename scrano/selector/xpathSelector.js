@@ -47,7 +47,9 @@ class XPathSelector {
             return []
         } else {
             return this.doc.map((node) => {
-                return node.firstChild.toString()
+                if (node && node.firstChild) {
+                    return node.firstChild.toString()
+                }
             })
         }
     }
