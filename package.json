@@ -1,6 +1,6 @@
 {
   "name": "scrano",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "模仿scrapy的node爬虫框架",
   "main": "./scrano/index.js",
   "scripts": {
