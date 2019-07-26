@@ -10,6 +10,10 @@ class Spider {
         this.crawler = options.crawler
         this.config = options.config
         this.validateAllowDomain = this.validateAllowDomain.bind(this)
+        this.parse = this.parse.bind(this)
+        this._initProcess_ = this._initProcess_.bind(this)
+        this.closed = this.closed.bind(this)
+        this.startRequests = this.startRequests.bind(this)
     }
 
     _initProcess_() {
@@ -57,7 +61,7 @@ class Spider {
     }
 
     toString() {
-        return `<Spider ${this.name}>`
+        return `<Spider ${this.constructor.name}>`
     }
 }
 

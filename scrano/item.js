@@ -1,6 +1,6 @@
 class Item {
     toString() {
-        return `<Item ${this.name}>`
+        return `<Item ${this.constructor.name}>`
     }
 }
 
